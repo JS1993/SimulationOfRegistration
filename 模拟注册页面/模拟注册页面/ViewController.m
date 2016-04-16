@@ -38,7 +38,7 @@ if (_textFieldToolbar==nil) {
         _scrollView=[[UIScrollView alloc]initWithFrame:self.view.bounds];
         _scrollView.backgroundColor=[UIColor grayColor];
         _scrollView.delegate=self;
-        _scrollView.contentSize=CGSizeMake(self.view.bounds.size.width, 1000);
+        _scrollView.contentSize=CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height+20);
         [self.view addSubview:_scrollView];
     }
     return _scrollView;
@@ -54,35 +54,67 @@ if (_textFieldToolbar==nil) {
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UILabel* nameL=[[UILabel alloc]initWithFrame:CGRectMake(10, 20, 40, 30)];
-    nameL.text=@"姓名";
+    [self creatContent];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardDidChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+}
+
+-(void)keyboardDidChangeFrame:(NSNotification*)noti{
+    self.scrollView.contentOffset=CGPointMake(0, self.scrollView.contentOffset.y+25);
+}
+-(void)creatContent{
+    UILabel* nameL=[[UILabel alloc]initWithFrame:CGRectMake(10, 20, 60, 30)];
+    nameL.text=@"用户名";
     [self.scrollView addSubview:nameL];
-    UITextField* nameTF=[[UITextField alloc]initWithFrame:CGRectMake(50, 20, 150, 30)];
+    UITextField* nameTF=[[UITextField alloc]initWithFrame:CGRectMake(80, 20, 150, 30)];
     nameTF.borderStyle=UITextBorderStyleRoundedRect;
     [self.scrollView addSubview:nameTF];
-    UILabel* phoneL=[[UILabel alloc]initWithFrame:CGRectMake(10, 60, 40, 30)];
+    UILabel* phoneL=[[UILabel alloc]initWithFrame:CGRectMake(10, 90, 60, 30)];
     phoneL.text=@"手机";
     [self.scrollView addSubview:phoneL];
-    UITextField* phoneTF=[[UITextField alloc]initWithFrame:CGRectMake(50, 60, 150, 30)];
+    UITextField* phoneTF=[[UITextField alloc]initWithFrame:CGRectMake(80, 90, 150, 30)];
     phoneTF.keyboardType=UIKeyboardTypeNumberPad;
     phoneTF.borderStyle=UITextBorderStyleRoundedRect;
     [self.scrollView addSubview:phoneTF];
-    UILabel* emailL=[[UILabel alloc]initWithFrame:CGRectMake(10, 100, 40, 30)];
+    UILabel* emailL=[[UILabel alloc]initWithFrame:CGRectMake(10, 160, 60, 30)];
     emailL.text=@"邮箱";
     [self.scrollView addSubview:emailL];
-    UITextField* emailTF=[[UITextField alloc]initWithFrame:CGRectMake(50, 100, 150, 30)];
+    UITextField* emailTF=[[UITextField alloc]initWithFrame:CGRectMake(80, 160, 150, 30)];
     emailTF.borderStyle=UITextBorderStyleRoundedRect;
     emailTF.keyboardType=UIKeyboardTypeEmailAddress;
     [self.scrollView addSubview:emailTF];
     
-    UILabel* birthL=[[UILabel alloc]initWithFrame:CGRectMake(10, 140, 40, 30)];
+    UILabel* birthL=[[UILabel alloc]initWithFrame:CGRectMake(10, 230, 60, 30)];
     birthL.text=@"生日";
     [self.scrollView addSubview:birthL];
-    self.birthTF=[[UITextField alloc]initWithFrame:CGRectMake(50, 140, 150, 30)];
+    self.birthTF=[[UITextField alloc]initWithFrame:CGRectMake(80, 230, 150, 30)];
     _birthTF.borderStyle=UITextBorderStyleRoundedRect;
     _birthTF.inputView=self.dataPicker;
     _birthTF.inputAccessoryView=self.textFieldToolbar;
     [self.scrollView addSubview:_birthTF];
+    
+    UILabel* ageL=[[UILabel alloc]initWithFrame:CGRectMake(10, 300, 60, 30)];
+    ageL.text=@"年龄";
+    [self.scrollView addSubview:ageL];
+    UITextField* ageTF=[[UITextField alloc]initWithFrame:CGRectMake(80, 300, 150, 30)];
+    ageTF.borderStyle=UITextBorderStyleRoundedRect;
+    ageTF.keyboardType=UIKeyboardTypeNumberPad;
+    [self.scrollView addSubview:ageTF];
+    
+    UILabel* userNmaeL=[[UILabel alloc]initWithFrame:CGRectMake(10, 370, 60, 30)];
+    userNmaeL.text=@"用户名";
+    [self.scrollView addSubview:userNmaeL];
+    UITextField* userNmaeTF=[[UITextField alloc]initWithFrame:CGRectMake(80, 370, 150, 30)];
+    userNmaeTF.borderStyle=UITextBorderStyleRoundedRect;
+    userNmaeTF.keyboardType=UIKeyboardTypeDefault;
+    [self.scrollView addSubview:userNmaeTF];
+    
+    UILabel* userKeyL=[[UILabel alloc]initWithFrame:CGRectMake(10, 440, 60, 30)];
+    userKeyL.text=@"密码";
+    [self.scrollView addSubview:userKeyL];
+    UITextField* userKeyTF=[[UITextField alloc]initWithFrame:CGRectMake(80, 440, 150, 30)];
+    userKeyTF.borderStyle=UITextBorderStyleRoundedRect;
+    userKeyTF.keyboardType=UIKeyboardTypeDefault;
+    [self.scrollView addSubview:userKeyTF];
 }
 
 -(void)finishChoose{
@@ -91,4 +123,5 @@ if (_textFieldToolbar==nil) {
     formatter.dateFormat=@"yyyy-MM-dd";
     self.birthTF.text=[formatter stringFromDate:date];
 }
+
 @end
