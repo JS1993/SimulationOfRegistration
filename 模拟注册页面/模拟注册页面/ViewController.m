@@ -38,7 +38,6 @@ if (_textFieldToolbar==nil) {
     if (_scrollView==nil) {
         _scrollView=[[UIScrollView alloc]initWithFrame:self.view.bounds];
         _scrollView.backgroundColor=[UIColor grayColor];
-        _scrollView.delegate=self;
         _scrollView.contentSize=CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height);
         [self.view addSubview:_scrollView];
     }
@@ -67,7 +66,7 @@ if (_textFieldToolbar==nil) {
     CGRect fm=[noti.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat keyMaxY=fm.origin.y;
     //得到输入框最大Y值
-    CGFloat textTFMaxY=tf.frame.origin.y;
+    CGFloat textTFMaxY=tf.frame.origin.y+self.scrollView.frame.origin.y;
     if (textTFMaxY+15>keyMaxY) {
         [UIView animateWithDuration:0.25 animations:^{
             self.view.transform = CGAffineTransformMakeTranslation(0, keyMaxY - textTFMaxY-40);
@@ -159,32 +158,33 @@ if (_textFieldToolbar==nil) {
         NSDateFormatter* formatter=[[NSDateFormatter alloc]init];
         formatter.dateFormat=@"yyyy-MM-dd";
         self.birthTF.text=[formatter stringFromDate:date];
-        [self.textFields[currentIndex+1] becomeFirstResponder];
-    }else if (currentIndex!=self.textFields.count-1) {
-        [self.textFields[currentIndex+1] becomeFirstResponder];
+        [self.textFields[currentIndex] resignFirstResponder];
+    }else {
+        [self.textFields[currentIndex] resignFirstResponder];
     }
 }
 
 -(void)preTF{
     int currentIndex=[self getCurrentIndex];
-    if (currentIndex!=0) {
+    if (currentIndex>0) {
         [self.textFields[currentIndex-1] becomeFirstResponder];
     }
 }
 
 -(void)nextTF{
     int currentIndex=[self getCurrentIndex];
-    if (currentIndex!=self.textFields.count-1) {
+    if (currentIndex<self.textFields.count-1) {
         [self.textFields[currentIndex+1] becomeFirstResponder];
     }
 }
-
+//得到当前textField在数组中的位置
 -(int)getCurrentIndex{
     for (UITextField* TF in self.textFields) {
         if ([TF isFirstResponder]) {
             return (int)[self.textFields indexOfObject:TF];
         }
     }
+    //返回-1代表没有找到当前的相应者
     return -1;
 }
 @end
