@@ -149,6 +149,9 @@ if (_textFieldToolbar==nil) {
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.view.transform = CGAffineTransformIdentity;
+    }];
 }
 
 -(void)finishChoose{
@@ -159,8 +162,10 @@ if (_textFieldToolbar==nil) {
         formatter.dateFormat=@"yyyy-MM-dd";
         self.birthTF.text=[formatter stringFromDate:date];
         [self.textFields[currentIndex] resignFirstResponder];
+        [self touchesBegan:nil withEvent:nil];
     }else {
         [self.textFields[currentIndex] resignFirstResponder];
+        [self touchesBegan:nil withEvent:nil];
     }
 }
 
